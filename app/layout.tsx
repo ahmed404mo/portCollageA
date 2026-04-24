@@ -7,10 +7,10 @@ import Footer from "@/components/footer"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "Sara - Early Childhood Education Student",
+  title: "ahmed - Early Childhood Education Student",
   description: "Combining education and creativity through technology",
   openGraph: {
-    title: "Sara - Early Childhood Education Student",
+    title: "ahmed - Early Childhood Education Student",
     description: "Combining education and creativity through technology",
     type: "website",
   },
