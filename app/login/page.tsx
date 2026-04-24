@@ -3,13 +3,13 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { useRouter } from "next/navigation"
-import { Lock, Mail, Loader2, Eye, EyeOff } from "lucide-react" // ضفنا أيقونات العين
+import { Lock, Mail, Loader2, Eye, EyeOff } from "lucide-react"
 import ParticlesBackground from "@/components/particles-background"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [showPassword, setShowPassword] = useState(false) // حالة إظهار الباسورد
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
@@ -29,13 +29,19 @@ export default function LoginPage() {
       const data = await res.json()
 
       if (data.success) {
-        router.push("/admin/profile")
+        // --- التعديل السحري هنا ---
+        // 1. بنخزن الكوكي في المتصفح عشان الميدل وير يشوفها
+        // auth_token=true دي نفس القيمة اللي بيبحث عنها الميدل وير
+        document.cookie = "auth_token=true; path=/; max-age=86400; SameSite=Lax";
+
+        // 2. بنستخدم window.location.href بدل router.push
+        // ده بيجبر الصفحة تعمل Hard Reload فالميدل وير بيقرأ الكوكي فوراً ويفتحلك الباب
+        window.location.href = "/admin/profile";
+        
       } else {
-        // لو الداتا رجعت خطأ من السيرفر
         setError(data.error || "Invalid credentials")
       }
     } catch (err) {
-      // لو السيرفر واقع أو المسار غلط
       setError("Connection error. Please check your API.")
     } finally {
       setIsLoading(false)
@@ -80,14 +86,13 @@ export default function LoginPage() {
               </label>
               <div className="relative">
                 <input
-                  type={showPassword ? "text" : "password"} // تغيير النوع بناءً على الحالة
+                  type={showPassword ? "text" : "password"}
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full bg-[#0D1117] border border-[#30363D] rounded-xl p-3 text-white focus:border-[#FF006E] focus:ring-1 focus:ring-[#FF006E] outline-none transition-all pr-12"
                   placeholder="••••••••"
                 />
-                {/* زر إظهار وإخفاء الباسورد */}
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}

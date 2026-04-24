@@ -13,7 +13,6 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // جلب بيانات البروفايل والإحصائيات في وقت واحد
     const fetchData = async () => {
       try {
         const [profileRes, statsRes] = await Promise.all([
@@ -25,8 +24,14 @@ export default function Home() {
         const statsData = await statsRes.json()
 
         setProfile(profileData)
-        // التأكد من أن الـ Stats مصفوفة
-        setStats(Array.isArray(statsData) ? statsData : [])
+
+        // التعديل الأساسي هنا: استخراج مصفوفة stats من داخل الـ Object
+        if (statsData.success && Array.isArray(statsData.stats)) {
+          setStats(statsData.stats)
+        } else {
+          setStats([])
+        }
+        
       } catch (error) {
         console.error("Error fetching home data:", error)
       } finally {
@@ -122,6 +127,7 @@ export default function Home() {
               </motion.div>
             </motion.div>
 
+            {/* Profile Image */}
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -140,24 +146,13 @@ export default function Home() {
                     priority
                   />
                 </div>
-
-                <motion.div
-                  animate={{ y: [0, -20, 0], rotate: [0, 5, 0] }}
-                  transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-                  className="absolute -top-4 -right-4 w-20 h-20 bg-[#FF006E]/20 rounded-lg backdrop-blur-sm border border-[#FF006E]/30"
-                />
-                <motion.div
-                  animate={{ y: [0, 20, 0], rotate: [0, -5, 0] }}
-                  transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-                  className="absolute -bottom-4 -left-4 w-16 h-16 bg-[#FB5581]/20 rounded-lg backdrop-blur-sm border border-[#FB5581]/30"
-                />
               </div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Dynamic Stats Section */}
+      {/* Stats Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -178,9 +173,8 @@ export default function Home() {
                 </motion.div>
               ))
             ) : (
-              // Empty state if no stats
               <div className="col-span-3 text-center text-gray-500 italic">
-                Populate your admin dashboard to see statistics.
+                No statistics found. Start adding projects and skills to see them here!
               </div>
             )}
           </div>
@@ -197,9 +191,6 @@ export default function Home() {
           >
             Let's Create Something <span className="gradient-text">Amazing</span> Together
           </motion.h2>
-          <p className="text-lg text-[#9CA3AF] max-w-2xl mx-auto">
-            Whether it's a software testing project or an educational tool, I'm ready to bring your vision to life.
-          </p>
           <Link
             href="/contact"
             className="inline-flex items-center gap-2 px-10 py-4 bg-gradient-to-r from-[#FF006E] to-[#FB5581] text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-[#FF006E]/50 transition-all hover:scale-105"
