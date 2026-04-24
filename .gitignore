@@ -27,3 +27,4 @@ yarn-error.log*
 next-env.d.ts
 
 public/weeks/weekOne/Sequence 01.mp4
+/lib/generated/prisma

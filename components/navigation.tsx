@@ -1,39 +1,40 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
+import Link from "next/link"
+import Image from "next/image"
+import { useState } from "react"
+import { Menu, X } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
 
 export default function Navigation() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
 
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/about", label: "About" },
     { href: "/projects", label: "Projects" },
+    { href: "/credentials", label: "Credentials" },
     { href: "/skills", label: "Skills" },
-    // { href: "/certificates", label: "Certificates" },
     { href: "/contact", label: "Contact" },
-  ];
+  ]
 
   return (
     <nav className="sticky top-0 z-50 bg-[#0D1117]/80 backdrop-blur-lg border-b border-[#30363D]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 bg-gradient-to-br from-[#00BFFF] to-[#3B82F6] rounded-lg flex items-center justify-center text-lg font-bold text-white shadow-lg group-hover:shadow-[#00BFFF]/50 transition-shadow">
+          
+          {/* Logo With Image */}
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 rounded-full overflow-hidden shadow-lg shadow-pink-500/30">
               <Image
-                alt="Logo"
-                src="/WhatsApp Image 2025-10-30 at 17.41.20_bd5578d7.jpg"
+                src="/sara.png"
+                alt="Sara Logo"
                 width={40}
                 height={40}
-                className="rounded-lg"
+                className="object-cover"
               />
             </div>
-            <span className="font-bold text-lg text-white">Ahmed</span>
+            <span className="font-bold text-lg text-white">Sara</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -42,17 +43,17 @@ export default function Navigation() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-[#9CA3AF] hover:text-[#00BFFF] transition-colors relative group"
+                className="text-sm font-medium text-[#9CA3AF] hover:text-[#FF006E] transition-colors relative group"
               >
                 {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00BFFF] group-hover:w-full transition-all duration-300" />
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#FF006E] group-hover:w-full transition-all duration-300" />
               </Link>
             ))}
           </div>
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden text-white hover:text-[#00BFFF] transition-colors"
+            className="md:hidden text-white hover:text-[#FF006E] transition-colors"
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -77,7 +78,7 @@ export default function Navigation() {
                 >
                   <Link
                     href={link.href}
-                    className="block px-4 py-2 text-sm font-medium text-[#9CA3AF] hover:text-[#00BFFF] hover:bg-[#161B22] rounded-lg transition-colors"
+                    className="block px-4 py-2 text-sm font-medium text-[#9CA3AF] hover:text-[#FF006E] hover:bg-[#161B22] rounded-lg transition-colors"
                     onClick={() => setIsOpen(false)}
                   >
                     {link.label}
@@ -89,5 +90,5 @@ export default function Navigation() {
         </AnimatePresence>
       </div>
     </nav>
-  );
+  )
 }

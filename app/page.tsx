@@ -1,12 +1,50 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, Loader2 } from "lucide-react"
 import ParticlesBackground from "@/components/particles-background"
 import Image from "next/image"
 
 export default function Home() {
+  const [profile, setProfile] = useState<any>(null)
+  const [stats, setStats] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    // جلب بيانات البروفايل والإحصائيات في وقت واحد
+    const fetchData = async () => {
+      try {
+        const [profileRes, statsRes] = await Promise.all([
+          fetch("/api/profile"),
+          fetch("/api/stats")
+        ])
+
+        const profileData = await profileRes.json()
+        const statsData = await statsRes.json()
+
+        setProfile(profileData)
+        // التأكد من أن الـ Stats مصفوفة
+        setStats(Array.isArray(statsData) ? statsData : [])
+      } catch (error) {
+        console.error("Error fetching home data:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#0D1117] flex items-center justify-center">
+        <Loader2 className="animate-spin text-[#FF006E]" size={40} />
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-[#0D1117] relative overflow-hidden">
       <ParticlesBackground />
@@ -26,9 +64,9 @@ export default function Home() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                className="text-[#00BFFF] font-semibold text-lg"
+                className="text-[#FF006E] font-semibold text-lg uppercase tracking-wider"
               >
-                Early Childhood Education Student
+                {profile?.headline || "Software Tester"}
               </motion.p>
 
               <motion.h1
@@ -37,14 +75,14 @@ export default function Home() {
                 transition={{ delay: 0.3 }}
                 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight"
               >
-                Hi, I'm <span className="gradient-text">Ahmed</span>
+                Hi, I'm <span className="gradient-text">{profile?.name?.split(' ')[0] || "Sara"}</span>
               </motion.h1>
 
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
-                className="text-xl text-[#9CA3AF] leading-relaxed"
+                className="text-xl text-[#9CA3AF] leading-relaxed italic"
               >
                 Combining education and creativity through technology
               </motion.p>
@@ -53,10 +91,9 @@ export default function Home() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
-                className="text-lg text-[#6B7280] leading-relaxed"
+                className="text-lg text-[#6B7280] leading-relaxed max-w-lg"
               >
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.
+                {profile?.bio || "Welcome to my professional portfolio where I showcase my journey in software testing and early childhood education."}
               </motion.p>
 
               <motion.div
@@ -67,17 +104,21 @@ export default function Home() {
               >
                 <Link
                   href="/projects"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-[#00BFFF] to-[#3B82F6] text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-[#00BFFF]/50 transition-all hover:scale-105 animate-glow"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-[#FF006E] to-[#FB5581] text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-[#FF006E]/50 transition-all hover:scale-105 animate-glow"
                 >
                   View Projects
                   <ArrowRight size={20} />
                 </Link>
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-[#00BFFF] text-[#00BFFF] font-semibold rounded-lg hover:bg-[#00BFFF]/10 transition-all glow-border"
-                >
-                  Contact Me
-                </Link>
+                {profile?.resumeUrl && (
+                  <a
+                    href={profile.resumeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-[#FF006E] text-[#FF006E] font-semibold rounded-lg hover:bg-[#FF006E]/10 transition-all"
+                  >
+                    Download CV
+                  </a>
+                )}
               </motion.div>
             </motion.div>
 
@@ -88,30 +129,27 @@ export default function Home() {
               className="relative order-1 lg:order-2 flex justify-center"
             >
               <div className="relative">
-                {/* Glow effect behind image */}
-                <div className="absolute inset-0 bg-gradient-to-r from-[#00BFFF] to-[#3B82F6] rounded-full blur-3xl opacity-30 animate-pulse" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#FF006E] to-[#FB5581] rounded-full blur-3xl opacity-30 animate-pulse" />
 
-                {/* Image container */}
-                <div className="relative w-72 h-72 md:w-96 md:h-96 rounded-full overflow-hidden border-4 border-[#00BFFF]/30 shadow-2xl shadow-[#00BFFF]/20">
+                <div className="relative w-72 h-72 md:w-96 md:h-96 rounded-full overflow-hidden border-4 border-[#FF006E]/30 shadow-2xl shadow-[#FF006E]/20">
                   <Image
-                    src="/professional-portrait.png"
-                    alt="Ahmed's Profile"
+                    src={profile?.avatarUrl || "/sara.png"}
+                    alt={profile?.name || "Sara's Profile"}
                     fill
                     className="object-cover"
                     priority
                   />
                 </div>
 
-                {/* Floating decorative elements */}
                 <motion.div
                   animate={{ y: [0, -20, 0], rotate: [0, 5, 0] }}
                   transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-                  className="absolute -top-4 -right-4 w-20 h-20 bg-[#00BFFF]/20 rounded-lg backdrop-blur-sm border border-[#00BFFF]/30"
+                  className="absolute -top-4 -right-4 w-20 h-20 bg-[#FF006E]/20 rounded-lg backdrop-blur-sm border border-[#FF006E]/30"
                 />
                 <motion.div
                   animate={{ y: [0, 20, 0], rotate: [0, -5, 0] }}
                   transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-                  className="absolute -bottom-4 -left-4 w-16 h-16 bg-[#3B82F6]/20 rounded-lg backdrop-blur-sm border border-[#3B82F6]/30"
+                  className="absolute -bottom-4 -left-4 w-16 h-16 bg-[#FB5581]/20 rounded-lg backdrop-blur-sm border border-[#FB5581]/30"
                 />
               </div>
             </motion.div>
@@ -119,58 +157,56 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Quick Stats Section */}
+      {/* Dynamic Stats Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { number: "10+", label: "Projects Completed" },
-              { number: "5+", label: "Certificates Earned" },
-              { number: "15+", label: "Skills Mastered" },
-            ].map((stat, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.2 }}
-                className="text-center p-8 rounded-xl bg-[#161B22] border border-[#30363D] hover:border-[#00BFFF]/50 transition-all group"
-              >
-                <div className="text-5xl font-bold gradient-text mb-3 group-hover:scale-110 transition-transform">
-                  {stat.number}
-                </div>
-                <p className="text-[#9CA3AF] font-medium">{stat.label}</p>
-              </motion.div>
-            ))}
+            {stats.length > 0 ? (
+              stats.map((stat, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.2 }}
+                  className="text-center p-8 rounded-xl bg-[#161B22] border border-[#30363D] hover:border-[#FF006E]/50 transition-all group"
+                >
+                  <div className="text-5xl font-bold gradient-text mb-3 group-hover:scale-110 transition-transform">
+                    {stat.number}
+                  </div>
+                  <p className="text-[#9CA3AF] font-medium">{stat.label}</p>
+                </motion.div>
+              ))
+            ) : (
+              // Empty state if no stats
+              <div className="col-span-3 text-center text-gray-500 italic">
+                Populate your admin dashboard to see statistics.
+              </div>
+            )}
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
       <section className="py-32 px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="space-y-8"
+        <div className="max-w-4xl mx-auto text-center space-y-8">
+          <motion.h2 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            className="text-4xl md:text-5xl font-bold text-white"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
-              Let's Create Something <span className="gradient-text">Amazing</span> Together
-            </h2>
-            <p className="text-lg text-[#9CA3AF] leading-relaxed max-w-2xl mx-auto">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Ut enim ad minim veniam.
-            </p>
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-2 px-10 py-4 bg-gradient-to-r from-[#00BFFF] to-[#3B82F6] text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-[#00BFFF]/50 transition-all hover:scale-105 animate-glow"
-            >
-              Get In Touch
-              <ArrowRight size={20} />
-            </Link>
-          </motion.div>
+            Let's Create Something <span className="gradient-text">Amazing</span> Together
+          </motion.h2>
+          <p className="text-lg text-[#9CA3AF] max-w-2xl mx-auto">
+            Whether it's a software testing project or an educational tool, I'm ready to bring your vision to life.
+          </p>
+          <Link
+            href="/contact"
+            className="inline-flex items-center gap-2 px-10 py-4 bg-gradient-to-r from-[#FF006E] to-[#FB5581] text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-[#FF006E]/50 transition-all hover:scale-105"
+          >
+            Get In Touch
+            <ArrowRight size={20} />
+          </Link>
         </div>
       </section>
     </div>

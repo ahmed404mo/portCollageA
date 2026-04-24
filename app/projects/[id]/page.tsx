@@ -1,309 +1,167 @@
 "use client"
 
-import React, { useState } from 'react'
-import { weeksData } from '../../data/weeksData'
-import { motion } from 'framer-motion'
-import { ArrowRight, X, PlayCircle, Globe, FileText, Download } from 'lucide-react' 
+import React, { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ArrowRight, X, PlayCircle, Globe, FileText, Download, Loader2 } from 'lucide-react' // شلنا Github وضفنا Download
 import { ProgrammingLanguages } from "@/components/animated-elements"
 import { useParams } from 'next/navigation'
+import Link from 'next/link'
 
-/**
- * كومبوننت الـ Modal
+/** * مكون الـ Modal الاحترافي 
  */
-const ResourceModal = ({ resource, onClose, domain }) => {
+const ResourceModal = ({ project, onClose }: { project: any, onClose: () => void }) => {
   let content;
-  let videoSrc = resource.href;
+  let resourceSrc = project.liveLink;
+  
+  // تحديد النوع بناءً على الـ Category (tags)
+  const isVideo = project.tags === "Video";
+  const isMaterial = project.tags === "Material";
 
-  switch (resource.type) {
-    case 'video':
-      // --- إصلاح لليوتيوب ---
-      if (videoSrc.includes('youtube.com/watch?v=')) {
-        videoSrc = videoSrc.replace('watch?v=', 'embed/');
-      } else if (videoSrc.includes('youtu.be/')) {
-        const videoId = videoSrc.split('youtu.be/')[1].split('?')[0];
-        videoSrc = `https://www.youtube.com/embed/${videoId}`;
-      } 
-      // --- إصلاح لجوجل درايف (الفيديوهات من Drive) ---
-      else if (videoSrc.includes('drive.google.com/file/d/')) {
-        const fileId = videoSrc.split('/file/d/')[1].split('/')[0];
-        videoSrc = `https://drive.google.com/file/d/${fileId}/preview`;
-      }
-      content = (
-        <iframe
-          src={videoSrc}
-          title="Video player"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          className='w-full h-full aspect-video'
-          style={{ width: '100%', height: '100%' }}
-        ></iframe>
-      );
-      break;
+  if (isVideo) {
+    if (resourceSrc.includes('youtube.com/watch?v=')) resourceSrc = resourceSrc.replace('watch?v=', 'embed/');
+    else if (resourceSrc.includes('youtu.be/')) resourceSrc = `https://www.youtube.com/embed/${resourceSrc.split('youtu.be/')[1].split('?')[0]}`;
     
-    case 'website':
-      content = (
-        <iframe
-          src={resource.href}
-          title={resource.title}
-          className='w-full h-full bg-white'
-          sandbox="allow-scripts allow-same-origin"
-        ></iframe>
-      );
-      break;
-
-    case 'powerpoint':
-      // تحقق إذا كان الـ href رابط كامل (يبدأ بـ http/https) أم لا
-      let fullPowerpointUrl = resource.href;
-      if (!resource.href?.startsWith('http')) {
-        fullPowerpointUrl = `${domain}${resource.href}`;
-      }
-      
-      // إذا كان ملف PPTX محلي، استخدم Office Viewer، وإلا استخدم الرابط مباشرة (مثل Google Slides pub)
-      let iframeSrc;
-      if (fullPowerpointUrl?.endsWith('.pptx') || fullPowerpointUrl?.endsWith('.ppt')) {
-        iframeSrc = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(fullPowerpointUrl)}`;
-      } else {
-        iframeSrc = fullPowerpointUrl;
-        // لو رابط Google Slides pub، أضف &embedded=true للـ iframe
-        if (iframeSrc.includes('/pub?') && !iframeSrc.includes('embedded=true')) {
-          iframeSrc += '&embedded=true';
-        }
-      }
-      
-      content = (
-        <iframe
-          src={iframeSrc}
-          title={resource.title}
-          className='w-full h-full bg-white'
-          frameBorder="0"
-          allowFullScreen
-        ></iframe>
-      );
-      break;
-
-    case 'pdf':
-      let pdfSrc = resource.href;
-      if (!pdfSrc) {
-        content = <p className="p-8 text-gray-600">No lesson plan available for this week yet.</p>;
-        break;
-      }
-      
-      // لو Google Presentation (حتى لو في case 'pdf'، عشان الرابط ده slides مش pdf)
-      if (pdfSrc.includes('docs.google.com/presentation/d/')) {
-        let presentationId;
-        if (pdfSrc.includes('/d/')) {
-          presentationId = pdfSrc.split('/d/')[1].split('/')[0];
-        }
-        if (presentationId) {
-          pdfSrc = `https://docs.google.com/presentation/d/${presentationId}/embed`;
-        }
-      }
-      // لو من Google Drive file أو Google Docs، حوّله لـ preview عام
-      else if (pdfSrc.includes('drive.google.com/file/d/') || pdfSrc.includes('docs.google.com/document')) {
-        let fileId;
-        if (pdfSrc.includes('/file/d/')) {
-          fileId = pdfSrc.split('/file/d/')[1].split('/')[0];
-        } else if (pdfSrc.includes('/document/d/')) {
-          fileId = pdfSrc.split('/document/d/')[1].split('/')[0];
-        }
-        if (fileId) {
-          pdfSrc = `https://drive.google.com/file/d/${fileId}/preview`;
-        }
-      } else if (!pdfSrc.startsWith('http')) {
-        // لو relative، أضف الـ domain
-        pdfSrc = `${domain}${pdfSrc}`;
-      }
-      
-      // لو PDF عادي، استخدم Google Viewer كـ fallback
-      if (pdfSrc.endsWith('.pdf')) {
-        pdfSrc = `https://docs.google.com/gview?url=${encodeURIComponent(pdfSrc)}&embedded=true`;
-      }
-      
-      content = (
-        <iframe
-          src={pdfSrc}
-          title={resource.title}
-          className='w-full h-full bg-white'
-          frameBorder="0"
-          allowFullScreen
-        ></iframe>
-      );
-      break;
-    
-    default:
-      content = <p>Unknown resource type</p>;
+    content = <iframe src={resourceSrc} title="Video player" frameBorder="0" allowFullScreen className='w-full h-full aspect-video rounded-2xl'></iframe>;
+  } 
+  else if (isMaterial) {
+    if (resourceSrc.includes('drive.google.com/file/d/')) {
+      const fileId = resourceSrc.split('/file/d/')[1].split('/')[0];
+      resourceSrc = `https://drive.google.com/file/d/${fileId}/preview`;
+    }
+    content = <iframe src={resourceSrc} title="Material Viewer" className='w-full h-full bg-white rounded-2xl' frameBorder="0" allowFullScreen></iframe>;
+  } 
+  else {
+    // للألعاب والمواقع (Game, VR/AR, Web App)
+    content = <iframe src={resourceSrc} title={project.title} className='w-full h-full bg-white rounded-2xl' sandbox="allow-scripts allow-same-origin"></iframe>;
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      onClick={onClose} 
-      className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4"
-    >
-      <motion.div
-        initial={{ scale: 0.7, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.7, opacity: 0 }}
-        onClick={(e) => e.stopPropagation()} 
-        className="relative w-full max-w-4xl h-[80vh] bg-white rounded-2xl overflow-hidden shadow-2xl"
-      >
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 z-10 p-2 bg-gray-700 text-white rounded-full hover:bg-gray-900 transition-colors"
-        >
-          <X size={20} />
-        </button>
-        {content}
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 backdrop-blur-md">
+      <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} onClick={(e) => e.stopPropagation()} className="relative w-full max-w-5xl h-[85vh] bg-[#161B22] border border-[#30363D] rounded-3xl overflow-hidden shadow-2xl flex flex-col p-2">
+        <div className="flex justify-between items-center p-4">
+            <h3 className="text-white font-bold text-xl">{project.title}</h3>
+            <button onClick={onClose} className="p-2 bg-[#30363D] text-gray-400 rounded-full hover:bg-red-500 hover:text-white transition-colors"><X size={20} /></button>
+        </div>
+        <div className="flex-1 overflow-hidden rounded-2xl border border-[#30363D] bg-black">
+            {content}
+        </div>
       </motion.div>
     </motion.div>
   );
 };
 
 
-/**
- * الصفحة الأساسية
+/** * صفحة تفاصيل المشروع 
  */
-export default function WeekPage() {
+export default function ProjectDetailsPage() {
   const params = useParams()
   const id = Number(params.id)
-  const week = weeksData[id]
   
-  const [selectedResource, setSelectedResource] = useState(null)
+  const [project, setProject] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
-  // 🔴 غيّر ده للينك بتاعك على جيت هاب
-  const YOUR_WEBSITE_DOMAIN = "https://YOUR-USERNAME.github.io/YOUR-REPO";
+  useEffect(() => {
+    fetch("/api/projects")
+      .then(res => res.json())
+      .then(data => {
+        const found = data.find((p: any) => p.id === id)
+        setProject(found)
+        setLoading(false)
+      })
+      .catch(() => setLoading(false))
+  }, [id])
 
-  if (!week) {
+  if (loading) return <div className='min-h-screen bg-[#0D1117] flex justify-center items-center'><Loader2 className="animate-spin text-[#FF006E]" size={50} /></div>
+
+  if (!project) {
     return (
-      <div className='p-6 h-screen flex justify-center items-center flex-col'>
-        <h1 className='text-6xl font-bold text-blue-400'>Page not found now</h1>
-        <p className='mt-2 text-gray-600'>The content will be available <span className='text-blue-700 font-bold'>next week.</span></p>
+      <div className='min-h-screen bg-[#0D1117] flex justify-center items-center flex-col space-y-4'>
+        <h1 className='text-6xl font-bold text-white'>404</h1>
+        <p className='text-gray-400 text-xl'>Project not found or removed.</p>
+        <Link href="/projects" className="text-[#FF006E] hover:underline flex items-center gap-2"><ArrowRight className="rotate-180" size={16}/> Back to Projects</Link>
       </div>
     )
   }
 
-  // 3. --- عدلنا الكارت الرابع هنا ---
-  const resources = [
-    {
-      id: "video",
-      title: "Video Lesson",
-      description: "Watch this week's video lesson.",
-      type: "video",
-      href: week.video, // من الداتا
-      tags: ["Video", "Lesson"],
-      hoverColor: "group-hover:from-[#00BBF9]/40 group-hover:to-[#00F5D4]/40",
-      icon: <PlayCircle className="mb-4 text-[#00BBF9]" size={40} />
-    },
-    {
-      id: "website",
-      title: "Interactive Activity",
-      description: "Try the interactive website exercise.",
-      type: "website",
-      href: week.website, // من الداتا
-      tags: ["Game", "HTML5"],
-      hoverColor: "group-hover:from-[#9B5DE5]/40 group-hover:to-[#F15BB5]/40",
-      icon: <Globe className="mb-4 text-[#9B5DE5]" size={40} />
-    },
-    {
-      id: "powerpoint",
-      title: "Presentation",
-      description: "Review the PowerPoint slides.",
-      type: "powerpoint",
-      href: week.powerpoint, // من الداتا
-      tags: ["Slides", "Review"],
-      hoverColor: "group-hover:from-[#FEE440]/40 group-hover:to-[#FFD60A]/40",
-      icon: <FileText className="mb-4 text-[#FFD60A]" size={40} />
-    },
-    {
-      // --- ده الكارت الجديد ---
-      id: "pdf",
-      title: "Lesson Plan",
-      description: "View or download the lesson plan.",
-      type: "pdf",
-      href: week.pdf, // <-- هيقرأ من الداتا
-      tags: ["PDF", "Preparation"],
-      hoverColor: "group-hover:from-red-500/20 group-hover:to-orange-500/20", // لون جديد
-      icon: <Download className="mb-4 text-red-500" size={40} /> // أيقونة جديدة
-    }
-  ]
+  // اختيار الأيقونة والنص بناءً على نوع المشروع
+  const getActionDetails = () => {
+      if(project.tags === "Video") return { icon: <PlayCircle size={32} />, text: "Watch Video Lesson" }
+      if(project.tags === "Material") return { icon: <FileText size={32} />, text: "View Material / PDF" }
+      return { icon: <Globe size={32} />, text: "Launch Interactive App" }
+  }
+
+  const action = getActionDetails();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-[#F8F9FA] to-white relative overflow-hidden">
+    <div className="min-h-screen bg-[#0D1117] relative overflow-hidden pb-20">
       <ProgrammingLanguages />
 
-      {/* Header Section */}
-      <section className="relative pt-20 pb-12 px-4 sm:px-6 lg:px-8 z-10">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center space-y-4"
-          >
-            <h1 className="text-5xl md:text-6xl font-bold text-[#2D3748]">{week.title}</h1>
-            <p className="text-lg text-[#556B7F] max-w-2xl mx-auto">
-              {week.description}
-            </p>
+      {/* Header with Background Image - الصورة الآن واضحة جداً */}
+      <section className="relative pt-40 pb-24 px-4 sm:px-6 lg:px-8 z-10 flex flex-col items-center justify-center min-h-[45vh]">
+        
+        {/* الصورة الخلفية مع التدرج */}
+        <div className="absolute inset-0 z-0">
+           {/* تمت إزالة الـ blur وزيادة الـ opacity لتصبح الصورة في غاية الوضوح */}
+           <img src={project.imageUrl || "/placeholder.jpg"} className="w-full h-full object-cover opacity-60" alt="Background" />
+           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0D1117]/70 to-[#0D1117]" />
+        </div>
+        
+        <div className="max-w-4xl mx-auto relative z-10 text-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
+            <span className="px-5 py-1.5 text-sm font-bold bg-[#FF006E]/90 text-white rounded-full border border-[#FF006E] uppercase tracking-widest inline-block shadow-lg">
+              {project.tags}
+            </span>
+            <h1 className="text-5xl md:text-7xl font-black text-white drop-shadow-2xl tracking-tight">{project.title}</h1>
           </motion.div>
         </div>
       </section>
 
-      {/* Resources Grid */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {resources.map((resource, index) => (
-              <motion.div
-                key={resource.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className={`group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-105 bg-gradient-to-br ${resource.hoverColor}`}
-              >
-                <div className="p-8 space-y-4">
-                  {resource.icon}
-                  <h3 className="text-2xl font-bold text-[#2D3748]">{resource.title}</h3>
-                  <p className="text-[#556B7F] text-sm leading-relaxed">{resource.description}</p>
+      {/* Content & Actions */}
+      <section className="py-12 px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+            
+            {/* Description */}
+            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="lg:col-span-2 space-y-6">
+                <h2 className="text-2xl font-bold text-white border-b border-[#30363D] pb-4">Project Overview</h2>
+                <p className="text-[#9CA3AF] text-lg leading-relaxed whitespace-pre-wrap break-words break-all md:break-words">
+                    {project.description}
+                </p>
+            </motion.div>
 
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-2">
-                    {resource.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-3 py-1 text-xs font-semibold bg-[#00BBF9]/10 text-[#00BBF9] rounded-full border border-[#00BBF9]/20"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* الزرار بيفتح الـ Modal */}
-                  <motion.button
-                    onClick={() => setSelectedResource(resource)}
-                    whileHover={{ x: 5 }}
-                    className="inline-flex items-center gap-2 text-[#00BBF9] font-semibold hover:text-[#9B5DE5] transition-colors mt-4"
+            {/* Actions Panel */}
+            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="lg:col-span-1 bg-[#161B22] border border-[#30363D] rounded-3xl p-8 space-y-6 shadow-2xl sticky top-24">
+                <h3 className="text-xl font-bold text-white mb-2">Project Links</h3>
+                
+                {/* زر تشغيل المشروع الأساسي (يفتح الـ Modal) */}
+                {project.liveLink && (
+                  <button 
+                    onClick={() => setIsModalOpen(true)}
+                    className="w-full bg-[#FF006E]/10 border border-[#FF006E]/30 hover:bg-[#FF006E] hover:text-white text-[#FF006E] p-6 rounded-2xl transition-all group flex flex-col items-center justify-center gap-3 shadow-lg"
                   >
-                    Open
-                    <ArrowRight size={16} />
-                  </motion.button>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                     <div className="group-hover:scale-110 transition-transform">{action.icon}</div>
+                     <span className="font-bold text-lg">{action.text}</span>
+                  </button>
+                )}
+
+                {/* زر الملفات الإضافية (كان زر Github سابقاً) */}
+                {project.githubLink && (
+                  <a 
+                    href={project.githubLink} target="_blank" rel="noopener noreferrer"
+                    className="w-full bg-[#0D1117] border border-[#30363D] hover:border-[#FF006E]/50 text-gray-300 hover:text-white p-4 rounded-xl transition-all flex items-center justify-center gap-3 font-semibold group"
+                  >
+                     <Download size={20} className="group-hover:text-[#FF006E] transition-colors" /> Access Files / Source
+                  </a>
+                )}
+            </motion.div>
+
         </div>
       </section>
-      
-      {/* الـ Modal */}
-      {selectedResource && (
-        <ResourceModal 
-          resource={selectedResource} 
-          onClose={() => setSelectedResource(null)}
-          domain={YOUR_WEBSITE_DOMAIN} 
-        />
-      )}
+
+      {/* Modal */}
+      <AnimatePresence>
+        {isModalOpen && <ResourceModal project={project} onClose={() => setIsModalOpen(false)} />}
+      </AnimatePresence>
     </div>
   )
 }

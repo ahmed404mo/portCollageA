@@ -1,49 +1,33 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, Loader2 } from "lucide-react"
 import { ProgrammingLanguages } from "@/components/animated-elements"
-// --- 1. ضيف السطر ده ---
+import ParticlesBackground from "@/components/particles-background"
 import Link from "next/link" 
 
 export default function ProjectsPage() {
-  const projects = [
-    {
-      id: 1,
-      title: "Week 1",
-      description: "Introduction and basic setup for the project.",
-      tags: ["HTML", "CSS"],
-      hoverColor: "group-hover:from-[#FEE440]/40 group-hover:to-[#FFD60A]/40",
-    },
-    {
-      id: 2,
-      title: "Week 2",
-      description: "Adding interactivity and animations.",
-      tags: ["JavaScript", "Framer Motion"],
-      hoverColor: "group-hover:from-[#00BBF9]/40 group-hover:to-[#00F5D4]/40",
-    },
-    {
-      id: 3,
-      title: "Week 3",
-      description: "Working with APIs and dynamic content.",
-      tags: ["React", "API"],
-      hoverColor: "group-hover:from-[#9B5DE5]/40 group-hover:to-[#F15BB5]/40",
-    },
-    {
-      id: 4,
-      title: "Week 4",
-      description: "Final touches and deployment.",
-      tags: ["Next.js", "Deployment"],
-      hoverColor: "group-hover:from-[#00F5D4]/40 group-hover:to-[#00BBF9]/40",
-    },
-  ]
+  const [projects, setProjects] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch("/api/projects")
+      .then(res => res.json())
+      .then(data => {
+        setProjects(Array.isArray(data) ? data : [])
+        setLoading(false)
+      })
+      .catch(() => setLoading(false))
+  }, [])
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-[#F8F9FA] to-white relative overflow-hidden">
+    <div className="min-h-screen bg-[#0D1117] relative overflow-hidden">
+      <ParticlesBackground />
       <ProgrammingLanguages />
 
-      {/* Header Section (زي ما هو) */}
-      <section className="relative pt-20 pb-12 px-4 sm:px-6 lg:px-8 z-10">
+      {/* Header Section */}
+      <section className="relative pt-32 pb-12 px-4 sm:px-6 lg:px-8 z-10">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -51,9 +35,9 @@ export default function ProjectsPage() {
             transition={{ duration: 0.8 }}
             className="text-center space-y-4"
           >
-            <h1 className="text-5xl md:text-6xl font-bold text-[#2D3748]">Weekly Projects</h1>
-            <p className="text-lg text-[#556B7F] max-w-2xl mx-auto">
-              Explore weekly progress and milestones achieved throughout the month.
+            <h1 className="text-5xl md:text-6xl font-bold text-white">Projects <span className="text-[#FF006E]">Library</span></h1>
+            <p className="text-lg text-[#9CA3AF] max-w-2xl mx-auto">
+              Explore my latest educational tools, games, and interactive platforms.
             </p>
           </motion.div>
         </div>
@@ -62,72 +46,45 @@ export default function ProjectsPage() {
       {/* Projects Grid */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects.map((project, index) => (
-              <motion.div
-                key={project.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className={`group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-105 bg-gradient-to-br ${project.hoverColor}`}
-              >
-                {/* Project Content */}
-                <div className="p-8 space-y-4">
-                  <h3 className="text-2xl font-bold text-[#2D3748]">{project.title}</h3>
-                  <p className="text-[#556B7F] text-sm leading-relaxed">{project.description}</p>
+          {loading ? (
+            <div className="flex justify-center py-20"><Loader2 className="animate-spin text-[#FF006E]" size={40} /></div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {projects.map((project: any, index: number) => (
+                <motion.div
+                  key={project.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <Link 
+                    href={`/projects/${project.id}`} 
+                    className="group block bg-[#161B22] border border-[#30363D] rounded-3xl overflow-hidden shadow-lg hover:border-[#FF006E]/50 transition-all duration-500 hover:-translate-y-2 h-full flex flex-col cursor-pointer"
+                  >
+                    <div className="h-48 w-full overflow-hidden relative">
+                       <img src={project.imageUrl || "/placeholder.jpg"} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt={project.title} />
+                    </div>
+                    <div className="p-8 space-y-4 flex-1 flex flex-col">
+                      <h3 className="text-2xl font-bold text-white group-hover:text-[#FF006E] transition-colors line-clamp-1">{project.title}</h3>
+                      <p className="text-[#9CA3AF] text-sm leading-relaxed line-clamp-2 flex-1">{project.description}</p>
 
-                  {/* Tags (زي ما هو) */}
-                  <div className="flex flex-wrap gap-2">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-3 py-1 text-xs font-semibold bg-[#00BBF9]/10 text-[#00BBF9] rounded-full border border-[#00BBF9]/20"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
+                      <div className="flex flex-wrap gap-2 pt-2">
+                        <span className="px-3 py-1 text-xs font-bold bg-[#FF006E]/10 text-[#FF006E] rounded-lg border border-[#FF006E]/30 uppercase tracking-wider">
+                          {project.tags}
+                        </span>
+                      </div>
 
-                  {/* --- 2. عدّل الزرار هنا --- */}
-                  <Link href={`/projects/${project.id}`} passHref>
-                    <motion.button
-                      whileHover={{ x: 5 }}
-                      className="inline-flex items-center gap-2 text-[#00BBF9] font-semibold hover:text-[#9B5DE5] transition-colors mt-4"
-                    >
-                      View Details
-                      <ArrowRight size={16} />
-                    </motion.button>
+                      {/* التعديل هنا: شكل الزرار الجديد */}
+                      <div className="mt-6 flex items-center justify-center gap-2 bg-[#FF006E] text-white font-bold py-3 px-4 rounded-xl group-hover:bg-[#FB5581] transition-all shadow-md">
+                         <span className="group-hover:-translate-x-1 transition-transform">View Details</span>
+                         <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </div>
                   </Link>
-                  {/* --- نهاية التعديل --- */}
-                  
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section (زي ما هو) */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-6"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#2D3748]">Ready for the Next Step?</h2>
-            <p className="text-lg text-[#556B7F] leading-relaxed">
-              Let's continue building, learning, and creating something extraordinary together.
-            </p>
-            <a
-              href="/contact"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#9B5DE5] to-[#00F5D4] text-white font-semibold rounded-full hover:shadow-lg transition-all hover:scale-105"
-            >
-              Start a Project
-              <ArrowRight size={20} />
-            </a>
-          </motion.div>
+                </motion.div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </div>

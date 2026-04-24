@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// جدول البروفايل (سجل واحد فقط لبيانات الهيدر والهوم)
+model Profile {
+  id          Int      @id @default(1) // يفضل تثبيته لسهولة الـ upsert
+  name        String
+  headline    String
+  bio         String
+  avatarUrl   String?
+  resumeUrl   String?
+  githubUrl   String?
+  linkedinUrl String?
+  email       String?
+  updatedAt   DateTime @updatedAt
+}
+
+// جدول من نحن (سجل واحد فقط لقصة سارة)
+model About {
+  id           Int      @id @default(1)
+  title        String
+  description  String   @db.Text
+  yearsOfExp   String?
+  location     String?
+  imageUrl     String?  
+  updatedAt    DateTime @updatedAt
+}
+
+// جدول الشهادات (متعدد)
+model Credential {
+  id          Int      @id @default(autoincrement())
+  title       String
+  issuer      String
+  date        String
+  description String?
+  imageUrl    String?
+  link        String?
+  createdAt   DateTime @default(now())
+}
+
+// جدول المشاريع (متعدد)
+model Project {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  imageUrl    String?
+  tags        String
+  createdAt   DateTime @default(now())
+  githubLink  String?
+  liveLink    String?
+}
+
+// جدول المهارات (متعدد)
+model Skill {
+  id        Int      @id @default(autoincrement())
+  category  String   // مثلاً: Frontend, Backend, Testing
+  name      String
+  level     Int      // القوة من 0 لـ 100
+  createdAt DateTime @default(now())
+}
+
+// جدول الرسائل (الواردة من الفورم)
+model Message {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  subject   String?
+  message   String
+  createdAt DateTime @default(now())
+}
+
+// جدول الأدمن (للتسجيل الدخول)
+model Admin {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+}

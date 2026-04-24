@@ -7,10 +7,10 @@ import Footer from "@/components/footer"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "Ahmed - Early Childhood Education Student",
+  title: "Sara - Early Childhood Education Student",
   description: "Combining education and creativity through technology",
   openGraph: {
-    title: "Ahmed - Early Childhood Education Student",
+    title: "Sara - Early Childhood Education Student",
     description: "Combining education and creativity through technology",
     type: "website",
   },
@@ -23,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} bg-[#0D1117] text-white antialiased`}>
         <Navigation />
         <main className="min-h-screen">{children}</main>
