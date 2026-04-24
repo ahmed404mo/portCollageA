@@ -94,14 +94,15 @@ export default function ProjectsAdmin() {
     <div className="max-w-6xl mx-auto space-y-8 pb-10">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-white">Projects Library</h1>
-        <button onClick={openAddModal} className="bg-[#FF006E] text-white px-8 py-3 rounded-2xl font-bold shadow-lg hover:bg-[#FB5581] transition-all">
+        {/* تم تغيير لون زر الإضافة للأزرق */}
+        <button onClick={openAddModal} className="bg-[#00BFFF] text-white px-8 py-3 rounded-2xl font-bold shadow-lg hover:bg-[#3B82F6] transition-all">
           <Plus size={20} className="inline mr-2" /> Add Project
         </button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {projects.map((p: any) => (
-          <div key={p.id} className="bg-[#161B22] border border-[#30363D] rounded-3xl overflow-hidden relative group">
+          <div key={p.id} className="bg-[#161B22] border border-[#30363D] rounded-3xl overflow-hidden relative group hover:border-[#00BFFF]/30 transition-all">
              <div className="relative">
                <img src={p.imageUrl} className="h-40 w-full object-cover" />
                <div className="absolute top-3 right-3 flex gap-2">
@@ -126,7 +127,6 @@ export default function ProjectsAdmin() {
               <button onClick={() => setIsModalOpen(false)} className="absolute top-6 right-6 text-gray-400 hover:text-white"><X size={24}/></button>
               <h2 className="text-2xl font-bold text-white mb-6">{editingId ? "Edit Project Details" : "New Project Details"}</h2>
               <form onSubmit={handleSubmit} className="space-y-6">
-                {/* نفس الفورم بتاعتك بالظبط بدون تعديل */}
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-gray-200">COVER IMAGE</label>
                   <div className="h-44 border-2 border-dashed border-[#444C56] rounded-2xl bg-[#0D1117] flex items-center justify-center relative overflow-hidden group">
@@ -151,9 +151,11 @@ export default function ProjectsAdmin() {
                 <textarea placeholder="Write about this project..." required rows={4} value={newProject.description} onChange={e => setNewProject({...newProject, description: e.target.value})} className="form-input resize-none" />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <input type="text" placeholder="https://github.com/..." value={newProject.githubLink} onChange={e => setNewProject({...newProject, githubLink: e.target.value})} className="form-input" />
-                  <input type="text" placeholder="Project or Game link" required value={newProject.liveLink} onChange={e => setNewProject({...newProject, liveLink: e.target.value})} className="form-input border-[#FF006E]/40" />
+                  {/* تم تغيير لون حدود حقل الرابط المباشر للأزرق */}
+                  <input type="text" placeholder="Project or Game link" required value={newProject.liveLink} onChange={e => setNewProject({...newProject, liveLink: e.target.value})} className="form-input border-[#00BFFF]/40" />
                 </div>
-                <button disabled={formLoading} className="w-full bg-[#FF006E] py-4 rounded-2xl font-bold text-lg hover:bg-[#FB5581] disabled:opacity-50 text-white shadow-lg transition-all">
+                {/* تم تغيير لون زر الحفظ للأزرق */}
+                <button disabled={formLoading} className="w-full bg-[#00BFFF] py-4 rounded-2xl font-bold text-lg hover:bg-[#3B82F6] disabled:opacity-50 text-white shadow-lg transition-all">
                   {formLoading ? <Loader2 className="animate-spin inline mr-2" /> : (editingId ? <Pencil className="inline mr-2" size={20} /> : <Plus className="inline mr-2" size={20} />)} 
                   {editingId ? "Save Changes" : "Add to Portfolio"}
                 </button>
@@ -183,7 +185,8 @@ export default function ProjectsAdmin() {
         )}
       </AnimatePresence>
 
-      <style jsx>{`.form-input { width: 100%; background-color: #0D1117; border: 2px solid #444C56; border-radius: 12px; padding: 12px; color: white; outline: none; transition: all 0.2s; } .form-input:focus { border-color: #FF006E; background-color: #161B22; }`}</style>
+      {/* تم تغيير لون الفوكس في الـ CSS للأزرق */}
+      <style jsx>{`.form-input { width: 100%; background-color: #0D1117; border: 2px solid #444C56; border-radius: 12px; padding: 12px; color: white; outline: none; transition: all 0.2s; } .form-input:focus { border-color: #00BFFF; background-color: #161B22; }`}</style>
     </div>
   )
 }

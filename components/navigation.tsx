@@ -23,44 +23,44 @@ export default function Navigation() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           
-          {/* Logo With Image */}
+          {/* Logo With Image - Updated name to Ahmed and color to Blue */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-full overflow-hidden shadow-lg shadow-pink-500/30">
+            <div className="w-10 h-10 rounded-full overflow-hidden shadow-lg shadow-[#00BFFF]/30 border border-[#00BFFF]/20">
               <Image
-                src="/sara.png"
-                alt="Sara Logo"
+                src="/Ahmed.png"
+                alt="Ahmed Logo"
                 width={40}
                 height={40}
                 className="object-cover"
               />
             </div>
-            <span className="font-bold text-lg text-white">Sara</span>
+            <span className="font-bold text-lg text-white group-hover:text-[#00BFFF] transition-colors">Ahmed</span>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation - Updated hover colors to Blue */}
           <div className="hidden md:flex gap-8">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-[#9CA3AF] hover:text-[#FF006E] transition-colors relative group"
+                className="text-sm font-medium text-[#9CA3AF] hover:text-[#00BFFF] transition-colors relative group"
               >
                 {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#FF006E] group-hover:w-full transition-all duration-300" />
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00BFFF] group-hover:w-full transition-all duration-300 shadow-[0_0_10px_#00BFFF]" />
               </Link>
             ))}
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Button - Updated hover color to Blue */}
           <button
-            className="md:hidden text-white hover:text-[#FF006E] transition-colors"
+            className="md:hidden text-white hover:text-[#00BFFF] transition-colors"
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Navigation - Updated hover colors and backgrounds to Blue */}
         <AnimatePresence>
           {isOpen && (
             <motion.div
@@ -78,7 +78,7 @@ export default function Navigation() {
                 >
                   <Link
                     href={link.href}
-                    className="block px-4 py-2 text-sm font-medium text-[#9CA3AF] hover:text-[#FF006E] hover:bg-[#161B22] rounded-lg transition-colors"
+                    className="block px-4 py-2 text-sm font-medium text-[#9CA3AF] hover:text-[#00BFFF] hover:bg-[#161B22] rounded-lg transition-colors"
                     onClick={() => setIsOpen(false)}
                   >
                     {link.label}

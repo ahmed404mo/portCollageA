@@ -28,16 +28,14 @@ export default function ContactPage() {
     setSubmitStatus("Sending message...")
 
     try {
-      // 1. إرسال الرسالة إلى الـ API لحفظها في الداتابيز فقط
       const res = await fetch("/api/messages", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       })
 
-      if (!res.ok) throw new Error("Failed to save message to database")
+      if (!res.ok) throw new Error("Failed to save message")
 
-      // 2. نجاح العملية وتفريغ الفورم
       setSubmitStatus("Message sent successfully! 🚀")
       setFormData({ name: "", email: "", subject: "", message: "" })
 
@@ -53,19 +51,19 @@ export default function ContactPage() {
     {
       icon: Mail,
       title: "Email",
-      value: "saraabdullwhab606@gmail.com",
-      link: "mailto:saraabdullwhab606@gmail.com",
+      value: "ahmed.mokhtar@example.com", // تم التحديث ليناسب الاسم الجديد
+      link: "mailto:ahmed.mokhtar@example.com",
     },
     {
       icon: Phone,
       title: "Phone",
-      value: "+20 102 273 1531",
-      link: "#", // تقدر تحط رقم التليفون هنا لو حابب: tel:+201022731531
+      value: "+20 100 000 0000",
+      link: "tel:+201000000000",
     },
     {
       icon: MapPin,
       title: "Location",
-      value: "Fakous, AlSharqia",
+      value: "Cairo, Egypt",
       link: "#",
     },
   ]
@@ -84,10 +82,10 @@ export default function ContactPage() {
             transition={{ duration: 0.8 }}
             className="text-center space-y-4"
           >
-            <h1 className="text-5xl md:text-6xl font-bold text-white">Get In Touch</h1>
+            <h1 className="text-5xl md:text-6xl font-bold text-white">Get In <span className="text-[#00BFFF]">Touch</span></h1>
             <p className="text-lg text-[#9CA3AF] max-w-2xl mx-auto">
-              Have a question or want to collaborate? I'd love to hear from you. Send me a message and I'll respond as
-              soon as possible.
+              Have a question or want to collaborate with Ahmed? I'd love to hear from you. 
+              Send me a message and I'll respond as soon as possible.
             </p>
           </motion.div>
         </div>
@@ -107,14 +105,14 @@ export default function ContactPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ scale: 1.02, y: -2 }}
-                  className="group p-6 rounded-2xl bg-[#161B22] shadow-lg hover:shadow-xl transition-all border border-[#30363D] hover:border-[#FF006E]/50 duration-300"
+                  className="group p-6 rounded-2xl bg-[#161B22] shadow-lg hover:shadow-xl transition-all border border-[#30363D] hover:border-[#00BFFF]/50 duration-300"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FF006E] to-[#FB5581] flex items-center justify-center text-white group-hover:scale-110 transition-transform shadow-lg shadow-[#FF006E]/20">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#00BFFF] to-[#3B82F6] flex items-center justify-center text-white group-hover:scale-110 transition-transform shadow-lg shadow-[#00BFFF]/20">
                       <Icon size={24} />
                     </div>
                     <div>
-                      <h3 className="font-bold text-white group-hover:text-[#FF006E] transition-colors">{info.title}</h3>
+                      <h3 className="font-bold text-white group-hover:text-[#00BFFF] transition-colors">{info.title}</h3>
                       <p className="text-[#9CA3AF] text-sm">{info.value}</p>
                     </div>
                   </div>
@@ -144,7 +142,7 @@ export default function ContactPage() {
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="Your name"
-                  className="bg-[#0D1117] text-white w-full px-4 py-3 rounded-xl border border-[#30363D] focus:border-[#FF006E] focus:outline-none focus:ring-1 focus:ring-[#FF006E]/50 transition-all placeholder:text-gray-600"
+                  className="bg-[#0D1117] text-white w-full px-4 py-3 rounded-xl border border-[#30363D] focus:border-[#00BFFF] focus:outline-none focus:ring-1 focus:ring-[#00BFFF]/50 transition-all placeholder:text-gray-600"
                   required
                   disabled={isSubmitting}
                 />
@@ -158,7 +156,7 @@ export default function ContactPage() {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="your@email.com"
-                  className="bg-[#0D1117] text-white w-full px-4 py-3 rounded-xl border border-[#30363D] focus:border-[#FF006E] focus:outline-none focus:ring-1 focus:ring-[#FF006E]/50 transition-all placeholder:text-gray-600"
+                  className="bg-[#0D1117] text-white w-full px-4 py-3 rounded-xl border border-[#30363D] focus:border-[#00BFFF] focus:outline-none focus:ring-1 focus:ring-[#00BFFF]/50 transition-all placeholder:text-gray-600"
                   required
                   disabled={isSubmitting}
                 />
@@ -172,7 +170,7 @@ export default function ContactPage() {
                   value={formData.subject}
                   onChange={handleChange}
                   placeholder="What is this about?"
-                  className="bg-[#0D1117] text-white w-full px-4 py-3 rounded-xl border border-[#30363D] focus:border-[#FF006E] focus:outline-none focus:ring-1 focus:ring-[#FF006E]/50 transition-all placeholder:text-gray-600"
+                  className="bg-[#0D1117] text-white w-full px-4 py-3 rounded-xl border border-[#30363D] focus:border-[#00BFFF] focus:outline-none focus:ring-1 focus:ring-[#00BFFF]/50 transition-all placeholder:text-gray-600"
                   required
                   disabled={isSubmitting}
                 />
@@ -186,7 +184,7 @@ export default function ContactPage() {
                   onChange={handleChange}
                   placeholder="Your message here..."
                   rows={5}
-                  className="bg-[#0D1117] text-white w-full px-4 py-3 rounded-xl border border-[#30363D] focus:border-[#FF006E] focus:outline-none focus:ring-1 focus:ring-[#FF006E]/50 transition-all resize-none placeholder:text-gray-600"
+                  className="bg-[#0D1117] text-white w-full px-4 py-3 rounded-xl border border-[#30363D] focus:border-[#00BFFF] focus:outline-none focus:ring-1 focus:ring-[#00BFFF]/50 transition-all resize-none placeholder:text-gray-600"
                   required
                   disabled={isSubmitting}
                 />
@@ -197,7 +195,7 @@ export default function ContactPage() {
                 whileTap={{ scale: 0.98 }}
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-4 bg-gradient-to-r from-[#FF006E] to-[#FB5581] text-white font-bold rounded-xl hover:shadow-lg hover:shadow-[#FF006E]/30 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-4 bg-gradient-to-r from-[#00BFFF] to-[#3B82F6] text-white font-bold rounded-xl hover:shadow-lg hover:shadow-[#00BFFF]/30 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? <Loader2 className="animate-spin" size={20} /> : <Send size={20} />}
                 {isSubmitting ? "Sending..." : "Send Message"}
@@ -208,7 +206,7 @@ export default function ContactPage() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className={`text-center font-bold text-sm ${
-                    submitStatus.includes("successfully") ? "text-[#FF006E]" : "text-red-500"
+                    submitStatus.includes("successfully") ? "text-[#00BFFF]" : "text-red-500"
                   }`}
                 >
                   {submitStatus}
@@ -216,21 +214,6 @@ export default function ContactPage() {
               )}
             </div>
           </motion.form>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-4"
-          >
-            <h2 className="text-3xl font-bold text-white">Let's Connect</h2>
-            <p className="text-[#9CA3AF]">Follow me on social media for updates on my latest projects and insights.</p>
-          </motion.div>
         </div>
       </section>
     </div>

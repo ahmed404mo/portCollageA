@@ -57,7 +57,8 @@ export default function SkillsPage() {
             transition={{ duration: 0.8 }}
             className="text-5xl md:text-6xl font-bold text-white"
           >
-            My <span className="text-[#FF006E]">Skills</span>
+            {/* تم تغيير اللون هنا من بينك لأزرق */}
+            My <span className="text-[#00BFFF]">Skills</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: -10 }}
@@ -75,7 +76,8 @@ export default function SkillsPage() {
         <div className="max-w-6xl mx-auto">
           {loading ? (
             <div className="flex justify-center items-center py-20">
-              <Loader2 className="animate-spin text-[#FF006E]" size={48} />
+              {/* تم تغيير لون الـ Loader */}
+              <Loader2 className="animate-spin text-[#00BFFF]" size={48} />
             </div>
           ) : skillCategories.length === 0 ? (
             <div className="text-center py-20 bg-[#161B22] border border-[#30363D] rounded-3xl">
@@ -89,11 +91,13 @@ export default function SkillsPage() {
                   initial={{ opacity: 0, x: categoryIndex % 2 === 0 ? -20 : 20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ delay: categoryIndex * 0.1 }}
-                  className="space-y-6 bg-[#161B22] p-8 rounded-3xl border border-[#30363D] shadow-lg hover:border-[#FF006E]/30 transition-all"
+                  // تم تغيير لون الـ Hover Border
+                  className="space-y-6 bg-[#161B22] p-8 rounded-3xl border border-[#30363D] shadow-lg hover:border-[#00BFFF]/30 transition-all"
                 >
                   <div>
                     <h2 className="text-2xl font-bold text-white mb-2">{category.category}</h2>
-                    <div className="h-1 w-16 bg-gradient-to-r from-[#FF006E] to-[#FB5581] rounded-full"></div>
+                    {/* تم تغيير ألوان الـ Gradient للخط اللي تحت العنوان */}
+                    <div className="h-1 w-16 bg-gradient-to-r from-[#00BFFF] to-[#3B82F6] rounded-full"></div>
                   </div>
 
                   <div className="space-y-6">
@@ -107,14 +111,16 @@ export default function SkillsPage() {
                       >
                         <div className="flex justify-between items-center">
                           <span className="font-semibold text-gray-300">{skill.name}</span>
-                          <span className="text-sm font-bold text-[#FF006E]">{skill.level}%</span>
+                          {/* تم تغيير لون النسبة المئوية */}
+                          <span className="text-sm font-bold text-[#00BFFF]">{skill.level}%</span>
                         </div>
                         <div className="w-full bg-[#0D1117] rounded-full h-3 overflow-hidden border border-[#30363D]">
                           <motion.div
                             initial={{ width: 0 }}
                             whileInView={{ width: `${skill.level}%` }}
                             transition={{ delay: categoryIndex * 0.1 + skillIndex * 0.05 + 0.2, duration: 0.8, ease: "easeOut" }}
-                            className="h-full bg-gradient-to-r from-[#FF006E] to-[#FB5581] rounded-full shadow-[0_0_10px_rgba(255,0,110,0.5)]"
+                            // تم تغيير ألوان الـ Gradient للـ Progress Bar ولون التوهج
+                            className="h-full bg-gradient-to-r from-[#00BFFF] to-[#3B82F6] rounded-full shadow-[0_0_10px_rgba(0,191,255,0.5)]"
                           />
                         </div>
                       </motion.div>
@@ -136,7 +142,8 @@ export default function SkillsPage() {
             transition={{ duration: 0.8 }}
           >
              <h2 className="text-3xl font-bold text-white">Other Competencies</h2>
-             <div className="h-1 w-24 bg-gradient-to-r from-[#FF006E] to-[#FB5581] rounded-full mx-auto mt-4"></div>
+             {/* تم تغيير ألوان الـ Gradient للخط اللي تحت العنوان */}
+             <div className="h-1 w-24 bg-gradient-to-r from-[#00BFFF] to-[#3B82F6] rounded-full mx-auto mt-4"></div>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -154,9 +161,11 @@ export default function SkillsPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ scale: 1.03, y: -2 }}
-                className="group p-8 rounded-3xl bg-[#161B22] border border-[#30363D] hover:border-[#FF006E]/50 transition-all duration-300 hover:shadow-xl hover:shadow-[#FF006E]/10 flex flex-col items-center justify-center text-center"
+                // تم تغيير لون الـ Hover Border ولون الـ Shadow
+                className="group p-8 rounded-3xl bg-[#161B22] border border-[#30363D] hover:border-[#00BFFF]/50 transition-all duration-300 hover:shadow-xl hover:shadow-[#00BFFF]/10 flex flex-col items-center justify-center text-center"
               >
-                <h3 className="font-bold text-lg text-white group-hover:text-[#FF006E] transition-colors mb-3">{competency.title}</h3>
+                {/* تم تغيير لون التايتل في الـ Hover */}
+                <h3 className="font-bold text-lg text-white group-hover:text-[#00BFFF] transition-colors mb-3">{competency.title}</h3>
                 <p className="text-[#9CA3AF] text-sm leading-relaxed">{competency.description}</p>
               </motion.div>
             ))}

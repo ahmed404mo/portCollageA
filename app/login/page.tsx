@@ -14,9 +14,9 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
-  const handleSubmit = async (e: React.FormEvent) => {
+const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
+    setIsLoading(true) 
     setError("")
 
     try {
@@ -29,22 +29,15 @@ export default function LoginPage() {
       const data = await res.json()
 
       if (data.success) {
-        // --- التعديل السحري هنا ---
-        // 1. بنخزن الكوكي في المتصفح عشان الميدل وير يشوفها
-        // auth_token=true دي نفس القيمة اللي بيبحث عنها الميدل وير
         document.cookie = "auth_token=true; path=/; max-age=86400; SameSite=Lax";
-
-        // 2. بنستخدم window.location.href بدل router.push
-        // ده بيجبر الصفحة تعمل Hard Reload فالميدل وير بيقرأ الكوكي فوراً ويفتحلك الباب
         window.location.href = "/admin/profile";
-        
       } else {
         setError(data.error || "Invalid credentials")
       }
     } catch (err) {
       setError("Connection error. Please check your API.")
     } finally {
-      setIsLoading(false)
+      setIsLoading(false) 
     }
   }
 
@@ -59,8 +52,8 @@ export default function LoginPage() {
       >
         <div className="bg-[#161B22] border border-[#30363D] p-8 rounded-3xl shadow-2xl backdrop-blur-sm">
           <div className="text-center space-y-2 mb-8">
-            <h1 className="text-3xl font-bold text-white">Admin <span className="text-[#FF006E]">Portal</span></h1>
-            <p className="text-gray-400">Welcome back, Sara!</p>
+            <h1 className="text-3xl font-bold text-white">Admin <span className="text-[#00BFFF]">Portal</span></h1>
+            <p className="text-gray-400">Welcome back, Ahmed!</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -74,7 +67,7 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-[#0D1117] border border-[#30363D] rounded-xl p-3 text-white focus:border-[#FF006E] focus:ring-1 focus:ring-[#FF006E] outline-none transition-all"
+                className="w-full bg-[#0D1117] border border-[#30363D] rounded-xl p-3 text-white focus:border-[#00BFFF] focus:ring-1 focus:ring-[#00BFFF] outline-none transition-all placeholder:text-gray-600"
                 placeholder="admin@example.com"
               />
             </div>
@@ -90,13 +83,13 @@ export default function LoginPage() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-[#0D1117] border border-[#30363D] rounded-xl p-3 text-white focus:border-[#FF006E] focus:ring-1 focus:ring-[#FF006E] outline-none transition-all pr-12"
+                  className="w-full bg-[#0D1117] border border-[#30363D] rounded-xl p-3 text-white focus:border-[#00BFFF] focus:ring-1 focus:ring-[#00BFFF] outline-none transition-all pr-12 placeholder:text-gray-600"
                   placeholder="••••••••"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#FF006E] transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#00BFFF] transition-colors"
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -113,12 +106,13 @@ export default function LoginPage() {
               </motion.p>
             )}
 
+            {/* تم تغيير لون الزرار والتوهج للأزرق */}
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               disabled={isLoading}
               type="submit"
-              className="w-full bg-gradient-to-r from-[#FF006E] to-[#FB5581] text-white font-bold py-3 rounded-xl shadow-lg shadow-[#FF006E]/20 flex items-center justify-center gap-2 disabled:opacity-50"
+              className="w-full bg-gradient-to-r from-[#00BFFF] to-[#3B82F6] text-white font-bold py-3 rounded-xl shadow-lg shadow-[#00BFFF]/20 flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {isLoading ? <Loader2 className="animate-spin" /> : "Sign In"}
             </motion.button>

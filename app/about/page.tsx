@@ -20,7 +20,11 @@ export default function AboutPage() {
       .catch(() => setLoading(false))
   }, [])
 
-  if (loading) return <div className="min-h-screen bg-[#0D1117] flex items-center justify-center"><Loader2 className="animate-spin text-[#FF006E]" size={40} /></div>
+  if (loading) return (
+    <div className="min-h-screen bg-[#0D1117] flex items-center justify-center">
+      <Loader2 className="animate-spin text-[#00BFFF]" size={40} />
+    </div>
+  )
 
   return (
     <div className="min-h-screen bg-[#0D1117] text-white relative overflow-hidden pb-20">
@@ -34,7 +38,7 @@ export default function AboutPage() {
           className="max-w-4xl mx-auto space-y-4"
         >
           <h1 className="text-5xl md:text-7xl font-extrabold tracking-tighter">
-            Sara's <span className="text-[#FF006E]">World</span>
+            Ahmed's <span className="text-[#00BFFF]">World</span>
           </h1>
           <p className="text-xl md:text-2xl text-gray-400 font-medium italic">
             Welcome to my digital playground – where education meets innovation
@@ -52,11 +56,12 @@ export default function AboutPage() {
             whileInView={{ opacity: 1, scale: 1 }}
             className="relative"
           >
-            <div className="absolute inset-0 bg-[#FF006E]/20 blur-[100px] rounded-full" />
-            <div className="relative rounded-3xl border-2 border-[#FF006E]/30 overflow-hidden shadow-2xl shadow-[#FF006E]/10 aspect-square">
+            {/* تم تغيير لون التوهج الخلفي للأزرق */}
+            <div className="absolute inset-0 bg-[#00BFFF]/20 blur-[100px] rounded-full" />
+            <div className="relative rounded-3xl border-2 border-[#00BFFF]/30 overflow-hidden shadow-2xl shadow-[#00BFFF]/10 aspect-square bg-[#161B22]">
               <Image 
                 src={aboutData?.imageUrl || "/about-placeholder.png"} 
-                alt="Sara's Universe" 
+                alt="Ahmed's Universe" 
                 fill 
                 className="object-cover"
               />
@@ -67,11 +72,11 @@ export default function AboutPage() {
               transition={{ duration: 3, repeat: Infinity }}
               className="absolute -top-6 -right-6 bg-[#161B22] p-4 rounded-2xl border border-[#30363D] shadow-xl"
             >
-              <Sparkles className="text-[#FF006E]" />
+              <Sparkles className="text-[#00BFFF]" />
             </motion.div>
           </motion.div>
 
-          {/* Text/Interactive Connections Part */}
+          {/* Text Content Part */}
           <div className="space-y-8">
             <motion.div
               initial={{ opacity: 0, x: 30 }}
@@ -79,47 +84,47 @@ export default function AboutPage() {
               className="space-y-4"
             >
               <h2 className="text-4xl font-bold flex items-center gap-3">
-                <Share2 className="text-[#FF006E]" /> My Universe
+                <Share2 className="text-[#00BFFF]" /> My Universe
               </h2>
               <p className="text-lg text-gray-300 leading-relaxed">
                 Dive into a connected world of ideas, where every node represents a passion, and every link is a collaboration. 
-                From coding interactive stories to designing child-friendly apps, this visualizes the flow of creativity.
+                From coding interactive stories to designing scalable web applications, this visualizes the flow of creativity.
               </p>
             </motion.div>
 
             {/* Connection Links */}
             <div className="space-y-4">
-              <h3 className="text-[#FF006E] font-bold tracking-widest uppercase text-sm">Explore Connections</h3>
+              <h3 className="text-[#00BFFF] font-bold tracking-widest uppercase text-sm">Explore Connections</h3>
               
-              <motion.div whileHover={{ x: 10 }} className="flex items-start gap-4 p-4 bg-[#161B22]/50 border border-[#30363D] rounded-2xl group hover:border-[#FF006E]/50 transition-all">
-                <div className="p-3 bg-[#FF006E]/10 rounded-lg text-[#FF006E]"><Code2 size={24}/></div>
+              <motion.div whileHover={{ x: 10 }} className="flex items-start gap-4 p-4 bg-[#161B22]/50 border border-[#30363D] rounded-2xl group hover:border-[#00BFFF]/50 transition-all">
+                <div className="p-3 bg-[#00BFFF]/10 rounded-lg text-[#00BFFF]"><Code2 size={24}/></div>
                 <div>
-                  <p className="text-gray-200 font-medium">Interactive learning tools built with Next.js and Python.</p>
+                  <p className="text-gray-200 font-medium">Interactive learning tools built with Next.js and Modern Tech.</p>
                 </div>
-                <ArrowRight className="ml-auto text-gray-600 group-hover:text-[#FF006E]" />
+                <ArrowRight className="ml-auto text-gray-600 group-hover:text-[#00BFFF]" />
               </motion.div>
 
-              <motion.div whileHover={{ x: 10 }} className="flex items-start gap-4 p-4 bg-[#161B22]/50 border border-[#30363D] rounded-2xl group hover:border-[#FF006E]/50 transition-all">
-                <div className="p-3 bg-[#FB5581]/10 rounded-lg text-[#FB5581]"><Rocket size={24}/></div>
+              <motion.div whileHover={{ x: 10 }} className="flex items-start gap-4 p-4 bg-[#161B22]/50 border border-[#30363D] rounded-2xl group hover:border-[#00BFFF]/50 transition-all">
+                <div className="p-3 bg-[#3B82F6]/10 rounded-lg text-[#3B82F6]"><Rocket size={24}/></div>
                 <div>
-                  <p className="text-gray-200 font-medium">Stories and games that spark young imaginations.</p>
+                  <p className="text-gray-200 font-medium">Projects and digital experiences that spark innovation.</p>
                 </div>
-                <ArrowRight className="ml-auto text-gray-600 group-hover:text-[#FB5581]" />
+                <ArrowRight className="ml-auto text-gray-600 group-hover:text-[#3B82F6]" />
               </motion.div>
 
-              <motion.div whileHover={{ x: 10 }} className="flex items-start gap-4 p-4 bg-[#161B22]/50 border border-[#30363D] rounded-2xl group hover:border-[#FF006E]/50 transition-all">
-                <div className="p-3 bg-blue-500/10 rounded-lg text-blue-500"><Share2 size={24}/></div>
+              <motion.div whileHover={{ x: 10 }} className="flex items-start gap-4 p-4 bg-[#161B22]/50 border border-[#30363D] rounded-2xl group hover:border-[#00BFFF]/50 transition-all">
+                <div className="p-3 bg-cyan-500/10 rounded-lg text-cyan-500"><Share2 size={24}/></div>
                 <div>
-                  <p className="text-gray-200 font-medium">Collaborative projects linking education and tech.</p>
+                  <p className="text-gray-200 font-medium">Collaborative architecture linking education and technology.</p>
                 </div>
-                <ArrowRight className="ml-auto text-gray-600 group-hover:text-blue-500" />
+                <ArrowRight className="ml-auto text-gray-600 group-hover:text-cyan-500" />
               </motion.div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Full Description from Database */}
+      {/* Full Description Section */}
       <section className="max-w-4xl mx-auto px-6 mt-32">
          <motion.div 
            initial={{ opacity: 0 }}
@@ -127,11 +132,11 @@ export default function AboutPage() {
            className="bg-[#161B22] p-10 rounded-[2rem] border border-[#30363D] relative overflow-hidden"
          >
             <div className="absolute top-0 right-0 p-8 opacity-5">
-              <Sparkles size={120} />
+              <Sparkles size={120} className="text-[#00BFFF]" />
             </div>
-            <h3 className="text-2xl font-bold mb-6 text-[#FF006E]">Behind the Vision</h3>
+            <h3 className="text-2xl font-bold mb-6 text-[#00BFFF]">Behind the Vision</h3>
             <div className="prose prose-invert max-w-none text-gray-300 leading-loose text-lg">
-              {aboutData?.description || "Loading the story..."}
+              {aboutData?.description || "Loading Ahmed's story..."}
             </div>
          </motion.div>
       </section>

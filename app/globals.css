@@ -78,12 +78,12 @@
   --font-sans: "Inter", "Geist", "Geist Fallback", system-ui, -apple-system, sans-serif;
   --font-mono: "Geist Mono", "Geist Mono Fallback", monospace;
 
-  /* Dark Professional Color Palette with Pink Accent */
+  /* Dark Professional Color Palette with Blue Accent (تم تعديل المسميات والألوان هنا) */
   --color-dark-bg: #0d1117;
   --color-dark-surface: #161b22;
   --color-dark-border: #30363d;
-  --color-accent-pink: #ff006e;
-  --color-accent-rose: #fb5581;
+  --color-accent-blue: #00bfff;
+  --color-accent-blue-dark: #3b82f6;
   --color-text-primary: #ffffff;
   --color-text-secondary: #9ca3af;
   --color-text-muted: #6b7280;
@@ -93,18 +93,17 @@
   --foreground: var(--color-text-primary);
   --card: var(--color-dark-surface);
   --card-foreground: var(--color-text-primary);
-  --primary: var(--color-accent-pink);
+  --primary: var(--color-accent-blue);
   --primary-foreground: var(--color-text-primary);
   --secondary: var(--color-dark-surface);
   --secondary-foreground: var(--color-text-primary);
   --muted: var(--color-dark-surface);
   --muted-foreground: var(--color-text-secondary);
-  --accent: var(--color-accent-rose);
+  --accent: var(--color-accent-blue-dark);
   --accent-foreground: var(--color-text-primary);
   --border: var(--color-dark-border);
   --radius: 0.5rem;
 
-  /* optional: --font-sans, --font-serif, --font-mono if they are applied in the layout.tsx */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -190,13 +189,14 @@ html {
   }
 }
 
+/* (تم تعديل اللون هنا للأزرق) */
 @keyframes glow {
   0%,
   100% {
-    box-shadow: 0 0 20px rgba(255, 0, 110, 0.3);
+    box-shadow: 0 0 20px rgba(0, 191, 255, 0.3); 
   }
   50% {
-    box-shadow: 0 0 40px rgba(255, 0, 110, 0.6);
+    box-shadow: 0 0 40px rgba(0, 191, 255, 0.6);
   }
 }
 
@@ -232,16 +232,16 @@ html {
 
 /* Gradient text effect */
 .gradient-text {
-  background: linear-gradient(135deg, #ff006e 0%, #fb5581 100%);
+  background: linear-gradient(to right, #00BFFF, #3B82F6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Glowing border effect */
+/* Glowing border effect (تم تعديل الألوان هنا) */
 .glow-border {
   position: relative;
-  border: 1px solid rgba(255, 0, 110, 0.3);
+  border: 1px solid rgba(0, 191, 255, 0.3);
 }
 
 .glow-border::before {
@@ -250,7 +250,7 @@ html {
   inset: -2px;
   border-radius: inherit;
   padding: 2px;
-  background: linear-gradient(135deg, #ff006e, #fb5581);
+  background: linear-gradient(135deg, #00BFFF, #3B82F6);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;

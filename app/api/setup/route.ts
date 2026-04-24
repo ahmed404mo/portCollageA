@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 
 export async function GET() {
   try {
-    const email = "saraabdullwhab606@gmail.com";
+    const email = "mo879938@gmail.com";
     const plainPassword = "0100adminmo@g";
     const hashedPassword = await bcrypt.hash(plainPassword, 10);
 

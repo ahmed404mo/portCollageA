@@ -58,17 +58,19 @@ export default function SkillsAdmin() {
     <div className="max-w-6xl mx-auto space-y-8 pb-10">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-           <h1 className="text-3xl font-bold flex items-center gap-3 text-white"><Code2 className="text-[#FF006E]" size={32} /> Manage Skills</h1>
+           {/* تم تغيير اللون للأزرق */}
+           <h1 className="text-3xl font-bold flex items-center gap-3 text-white"><Code2 className="text-[#00BFFF]" size={32} /> Manage Skills</h1>
            <p className="text-gray-400 mt-1">Add and organize your technical and soft skills.</p>
         </div>
-        <button onClick={openAddModal} className="bg-[#FF006E] hover:bg-[#FB5581] text-white px-8 py-3 rounded-2xl font-bold flex items-center gap-2 transition-all shadow-lg">
+        {/* زر الإضافة بالأزرق */}
+        <button onClick={openAddModal} className="bg-[#00BFFF] hover:bg-[#3B82F6] text-white px-8 py-3 rounded-2xl font-bold flex items-center gap-2 transition-all shadow-lg shadow-[#00BFFF]/20">
           <Plus size={20} /> Add New Skill
         </button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {skills.map((skill: any) => (
-          <div key={skill.id} className="bg-[#161B22] p-6 rounded-3xl border border-[#30363D] hover:border-[#FF006E]/50 transition-all group relative overflow-hidden">
+          <div key={skill.id} className="bg-[#161B22] p-6 rounded-3xl border border-[#30363D] hover:border-[#00BFFF]/50 transition-all group relative overflow-hidden">
              <div className="flex justify-between items-start mb-4">
                <div>
                  <h3 className="font-bold text-xl text-white">{skill.name}</h3>
@@ -80,9 +82,11 @@ export default function SkillsAdmin() {
                </div>
              </div>
              <div className="space-y-2">
-               <div className="flex justify-between text-sm"><span className="text-gray-400 font-medium">Proficiency</span><span className="font-bold text-[#FF006E]">{skill.level}%</span></div>
+               {/* النسبة المئوية بالأزرق */}
+               <div className="flex justify-between text-sm"><span className="text-gray-400 font-medium">Proficiency</span><span className="font-bold text-[#00BFFF]">{skill.level}%</span></div>
                <div className="w-full bg-[#0D1117] rounded-full h-2.5 overflow-hidden border border-[#30363D]">
-                 <div style={{width: `${skill.level}%`}} className="h-full bg-gradient-to-r from-[#FF006E] to-[#FB5581] rounded-full" />
+                 {/* شريط التقدم بالأزرق */}
+                 <div style={{width: `${skill.level}%`}} className="h-full bg-gradient-to-r from-[#00BFFF] to-[#3B82F6] rounded-full shadow-[0_0_10px_#00BFFF55]" />
                </div>
              </div>
           </div>
@@ -101,11 +105,14 @@ export default function SkillsAdmin() {
                 <input type="text" placeholder="Skill Name" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="form-input" />
                 <input type="text" placeholder="Category" required list="categories" value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="form-input" />
                 <datalist id="categories"><option value="Frontend" /><option value="Backend" /><option value="Testing" /><option value="Educational Skills" /><option value="Soft Skills" /></datalist>
+                
                 <div className="space-y-3 bg-[#0D1117] p-5 rounded-2xl border border-[#444C56]">
-                  <div className="flex justify-between items-center"><label className="text-xs font-bold text-gray-300">PROFICIENCY</label><span className="text-xl font-black text-[#FF006E]">{formData.level}%</span></div>
-                  <input type="range" min="0" max="100" step="5" value={formData.level} onChange={e => setFormData({...formData, level: Number(e.target.value)})} className="w-full accent-[#FF006E] cursor-pointer" />
+                  {/* اللون الأزرق في الـ Range */}
+                  <div className="flex justify-between items-center"><label className="text-xs font-bold text-gray-300">PROFICIENCY</label><span className="text-xl font-black text-[#00BFFF]">{formData.level}%</span></div>
+                  <input type="range" min="0" max="100" step="5" value={formData.level} onChange={e => setFormData({...formData, level: Number(e.target.value)})} className="w-full accent-[#00BFFF] cursor-pointer" />
                 </div>
-                <button disabled={formLoading} className="w-full bg-[#FF006E] py-4 rounded-2xl font-bold text-white transition-all">
+
+                <button disabled={formLoading} className="w-full bg-[#00BFFF] hover:bg-[#3B82F6] py-4 rounded-2xl font-bold text-white transition-all shadow-lg shadow-[#00BFFF]/20">
                   {formLoading ? <Loader2 className="animate-spin inline mr-2" /> : (editingId ? "Save Changes" : "Add Skill")}
                 </button>
               </form>
@@ -131,7 +138,8 @@ export default function SkillsAdmin() {
         )}
       </AnimatePresence>
 
-      <style jsx>{`.form-input { width: 100%; background-color: #0D1117; border: 2px solid #444C56; border-radius: 12px; padding: 12px; color: white; outline: none; transition: all 0.2s; } .form-input:focus { border-color: #FF006E; background-color: #161B22; }`}</style>
+      {/* CSS للأزرق عند الـ focus */}
+      <style jsx>{`.form-input { width: 100%; background-color: #0D1117; border: 2px solid #444C56; border-radius: 12px; padding: 12px; color: white; outline: none; transition: all 0.2s; } .form-input:focus { border-color: #00BFFF; background-color: #161B22; }`}</style>
     </div>
   )
 }

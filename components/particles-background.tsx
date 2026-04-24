@@ -21,7 +21,6 @@ export default function ParticlesBackground() {
     const ctx = canvas.getContext("2d")
     if (!ctx) return
 
-    // Set canvas size
     const resizeCanvas = () => {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
@@ -29,7 +28,6 @@ export default function ParticlesBackground() {
     resizeCanvas()
     window.addEventListener("resize", resizeCanvas)
 
-    // Create particles
     const particles: Particle[] = []
     const particleCount = 50
 
@@ -44,30 +42,25 @@ export default function ParticlesBackground() {
       })
     }
 
-    // Animation loop
     const animate = () => {
       ctx.fillStyle = "rgba(13, 17, 23, 0.1)"
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
       particles.forEach((particle) => {
-        // Update position
         particle.x += particle.vx
         particle.y += particle.vy
 
-        // Wrap around edges
         if (particle.x < 0) particle.x = canvas.width
         if (particle.x > canvas.width) particle.x = 0
         if (particle.y < 0) particle.y = canvas.height
         if (particle.y > canvas.height) particle.y = 0
 
-        // Draw particle
         ctx.beginPath()
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(255, 0, 110, ${particle.opacity})`
+        ctx.fillStyle = `rgba(0, 191, 255, ${particle.opacity})`
         ctx.fill()
       })
 
-      // Draw connections
       particles.forEach((p1, i) => {
         particles.slice(i + 1).forEach((p2) => {
           const dx = p1.x - p2.x
@@ -78,7 +71,7 @@ export default function ParticlesBackground() {
             ctx.beginPath()
             ctx.moveTo(p1.x, p1.y)
             ctx.lineTo(p2.x, p2.y)
-            ctx.strokeStyle = `rgba(255, 0, 110, ${0.2 * (1 - distance / 150)})`
+            ctx.strokeStyle = `rgba(0, 191, 255, ${0.2 * (1 - distance / 150)})`
             ctx.lineWidth = 1
             ctx.stroke()
           }

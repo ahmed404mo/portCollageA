@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Mail, Trash2, Calendar, User, MessageSquareText, Loader2, Inbox, Reply, AlertTriangle } from "lucide-react" // ضفنا AlertTriangle
-import { motion, AnimatePresence } from "framer-motion" // ضفنا AnimatePresence
+import { Mail, Trash2, Calendar, User, MessageSquareText, Loader2, Inbox, Reply, AlertTriangle } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
 import { toast } from "react-hot-toast"
 
 export default function MessagesAdmin() {
@@ -31,7 +31,6 @@ export default function MessagesAdmin() {
     fetchMessages()
   }, [])
 
-  // دالة الحذف اللي بتشتغل لما تدوس Delete من الـ Popup
   const confirmDelete = async () => {
     if (!deleteId) return
     
@@ -40,8 +39,8 @@ export default function MessagesAdmin() {
       const res = await fetch(`/api/messages?id=${deleteId}`, { method: 'DELETE' })
       if (res.ok) {
         toast.success("Message deleted", { id: tid })
-        setDeleteId(null) // نقفل الـ Popup
-        fetchMessages() // نحدث القائمة
+        setDeleteId(null)
+        fetchMessages()
       } else {
         throw new Error("Failed to delete")
       }
@@ -50,7 +49,6 @@ export default function MessagesAdmin() {
     }
   }
 
-  // دالة الرد عبر Gmail
   const handleReply = (email: string, subject: string) => {
     const replySubject = encodeURIComponent(`Re: ${subject || "Your Message"}`)
     const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${replySubject}`
@@ -61,7 +59,8 @@ export default function MessagesAdmin() {
     <div className="space-y-8 pb-10 relative">
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-white flex items-center gap-3">
-          <Inbox className="text-[#FF006E]" size={32} /> Inbox
+          {/* تم تغيير اللون للأزرق */}
+          <Inbox className="text-[#00BFFF]" size={32} /> Inbox
         </h1>
         <p className="text-gray-400 mt-1">View and manage messages sent by your visitors</p>
       </div>
@@ -69,7 +68,7 @@ export default function MessagesAdmin() {
       <div className="space-y-4">
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24">
-            <Loader2 className="animate-spin text-[#FF006E] mb-4" size={40} />
+            <Loader2 className="animate-spin text-[#00BFFF] mb-4" size={40} />
             <p className="text-gray-500 animate-pulse font-medium">Checking your inbox...</p>
           </div>
         ) : messages.length === 0 ? (
@@ -93,11 +92,12 @@ export default function MessagesAdmin() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
               key={msg.id}
-              className="bg-[#161B22] border border-[#30363D] p-6 rounded-3xl hover:border-[#FF006E]/30 transition-all group"
+              className="bg-[#161B22] border border-[#30363D] p-6 rounded-3xl hover:border-[#00BFFF]/30 transition-all group"
             >
               <div className="flex flex-col md:flex-row justify-between items-start mb-4 gap-4">
                 <div className="flex gap-4 items-center">
-                  <div className="w-12 h-12 bg-[#FF006E]/10 rounded-full flex items-center justify-center text-[#FF006E] shadow-lg shadow-[#FF006E]/5">
+                  {/* تم تغيير الخلفية للأزرق الشفاف */}
+                  <div className="w-12 h-12 bg-[#00BFFF]/10 rounded-full flex items-center justify-center text-[#00BFFF] shadow-lg shadow-[#00BFFF]/5">
                     <User size={24} />
                   </div>
                   <div>
@@ -108,13 +108,12 @@ export default function MessagesAdmin() {
                   </div>
                 </div>
 
-                {/* Actions Section */}
                 <div className="flex items-center gap-3 w-full md:w-auto justify-end">
                   <span className="text-[10px] text-gray-400 flex items-center gap-1 bg-[#0D1117] px-3 py-1.5 rounded-lg uppercase tracking-widest font-bold border border-[#30363D]">
-                    <Calendar size={12} className="text-[#FF006E]" /> {new Date(msg.createdAt).toLocaleDateString()}
+                    {/* تم تغيير لون الأيقونة للأزرق */}
+                    <Calendar size={12} className="text-[#00BFFF]" /> {new Date(msg.createdAt).toLocaleDateString()}
                   </span>
                   
-                  {/* زرار الرد */}
                   <button 
                     onClick={() => handleReply(msg.email, msg.subject)}
                     className="p-2 text-blue-400 bg-blue-400/10 hover:bg-blue-400 hover:text-white rounded-xl transition-all"
@@ -123,7 +122,6 @@ export default function MessagesAdmin() {
                     <Reply size={18} />
                   </button>
 
-                  {/* زرار الحذف (بيفتح الـ Popup) */}
                   <button 
                     onClick={() => setDeleteId(msg.id)}
                     className="p-2 text-red-400 bg-red-400/10 hover:bg-red-400 hover:text-white rounded-xl transition-all"
@@ -135,10 +133,11 @@ export default function MessagesAdmin() {
               </div>
 
               <div className="bg-[#0D1117] p-5 rounded-2xl border border-[#30363D]">
-                 <h4 className="text-sm font-bold text-[#FF006E] mb-3 flex items-center gap-2">
-                   <MessageSquareText size={16} /> {msg.subject || "No Subject"}
-                 </h4>
-                 <p className="text-gray-300 leading-relaxed whitespace-pre-wrap">{msg.message}</p>
+                  {/* تم تغيير لون عنوان الرسالة للأزرق */}
+                  <h4 className="text-sm font-bold text-[#00BFFF] mb-3 flex items-center gap-2">
+                    <MessageSquareText size={16} /> {msg.subject || "No Subject"}
+                  </h4>
+                  <p className="text-gray-300 leading-relaxed whitespace-pre-wrap">{msg.message}</p>
               </div>
             </motion.div>
           ))
@@ -149,7 +148,6 @@ export default function MessagesAdmin() {
       <AnimatePresence>
         {deleteId && (
           <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-            {/* الخلفية الشفافة */}
             <motion.div 
               initial={{ opacity: 0 }} 
               animate={{ opacity: 1 }} 
@@ -158,7 +156,6 @@ export default function MessagesAdmin() {
               className="absolute inset-0 bg-black/80 backdrop-blur-sm" 
             />
             
-            {/* صندوق التأكيد */}
             <motion.div 
               initial={{ scale: 0.9, opacity: 0 }} 
               animate={{ scale: 1, opacity: 1 }} 

@@ -9,7 +9,7 @@ import {
 } from "lucide-react"
 
 const menuItems = [
-{ name: "Profile", href: "/admin/profile", icon: User },
+  { name: "Profile", href: "/admin/profile", icon: User },
   { name: "About Me", href: "/admin/about", icon: Info }, 
   { name: "Projects", href: "/admin/projects", icon: Briefcase },
   { name: "Credentials", href: "/admin/credentials", icon: GraduationCap },
@@ -20,13 +20,32 @@ const menuItems = [
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
 
+  // دالة لتسجيل الخروج (مسح الكوكي)
+  const handleLogout = () => {
+    document.cookie = "auth_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+    window.location.href = "/login";
+  }
+
   return (
     <div className="flex min-h-screen bg-[#0D1117] text-white">
-<Toaster position="top-center" toastOptions={{ duration: 4000, style: { background: '#161B22', color: '#fff', border: '1px solid #30363D' } }} />
+      {/* تحديث ألوان التنبيهات (Toaster) لتناسب الثيم الأزرق */}
+      <Toaster 
+        position="top-center" 
+        toastOptions={{ 
+          duration: 4000, 
+          style: { 
+            background: '#161B22', 
+            color: '#fff', 
+            border: '1px solid #00BFFF' 
+          } 
+        }} 
+      />
+
       {/* Sidebar */}
       <aside className="w-64 bg-[#161B22] border-r border-[#30363D] fixed h-full shadow-xl z-20">
         <div className="p-6">
-          <h2 className="text-xl font-bold text-[#FF006E] flex items-center gap-2">
+          {/* تم تغيير اللون للأزرق */}
+          <h2 className="text-xl font-bold text-[#00BFFF] flex items-center gap-2">
             <LayoutDashboard size={24} /> Admin Panel
           </h2>
         </div>
@@ -39,10 +58,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Link
                 key={item.href}
                 href={item.href}
+                // تم تحديث لون الخلفية النشطة والظل للأزرق
                 className={`flex items-center gap-3 p-3 rounded-xl transition-all ${
                   isActive 
-                    ? "bg-[#FF006E] text-white shadow-lg shadow-[#FF006E]/20" 
-                    : "text-gray-400 hover:bg-[#30363D] hover:text-white"
+                    ? "bg-[#00BFFF] text-white shadow-lg shadow-[#00BFFF]/20" 
+                    : "text-gray-400 hover:bg-[#30363D] hover:text-[#00BFFF]"
                 }`}
               >
                 <Icon size={20} />
@@ -53,8 +73,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
 
         <div className="absolute bottom-8 w-full px-4">
-          <button className="flex items-center gap-3 p-3 w-full text-red-400 hover:bg-red-500/10 rounded-xl transition-all">
-            <LogOut size={20} />
+          <button 
+            onClick={handleLogout}
+            className="flex items-center gap-3 p-3 w-full text-red-400 hover:bg-red-500/10 rounded-xl transition-all group"
+          >
+            <LogOut size={20} className="group-hover:-translate-x-1 transition-transform" />
             <span className="font-medium">Logout</span>
           </button>
         </div>

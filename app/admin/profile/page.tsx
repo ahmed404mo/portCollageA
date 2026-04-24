@@ -38,7 +38,6 @@ export default function ProfileAdmin() {
     e.preventDefault()
     setLoading(true)
     
-    // إنشاء التنبيه العائم (Popup Toast)
     const loadId = toast.loading("Updating your profile...")
 
     try {
@@ -63,7 +62,8 @@ export default function ProfileAdmin() {
   if (fetching) {
     return (
       <div className="flex flex-col items-center justify-center py-40 gap-4">
-        <Loader2 className="animate-spin text-[#FF006E]" size={48} />
+        {/* تغيير لون الـ Loader للأزرق */}
+        <Loader2 className="animate-spin text-[#00BFFF]" size={48} />
         <p className="text-gray-500 animate-pulse">Loading settings...</p>
       </div>
     )
@@ -73,7 +73,7 @@ export default function ProfileAdmin() {
     <motion.div 
       initial={{ opacity: 0, y: 20 }} 
       animate={{ opacity: 1, y: 0 }} 
-      className="max-w-4xl mx-auto space-y-8 pb-20"
+      className="max-w-4xl mx-auto space-y-8 pb-20 text-white"
     >
       <header className="flex flex-col gap-2">
         <h1 className="text-4xl font-extrabold tracking-tight">Profile Settings</h1>
@@ -84,12 +84,14 @@ export default function ProfileAdmin() {
         
         {/* Profile Picture Card */}
         <section className="bg-[#161B22] p-8 rounded-3xl border border-[#30363D] shadow-xl">
-          <h2 className="text-xl font-bold mb-6 flex items-center gap-2 text-[#FF006E]">
+          {/* تغيير لون الأيقونة للأزرق */}
+          <h2 className="text-xl font-bold mb-6 flex items-center gap-2 text-[#00BFFF]">
             <ImageIcon size={20} /> Identity Image
           </h2>
           <div className="flex flex-col sm:flex-row items-center gap-8">
             <div className="relative group">
-              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-[#FF006E]/20 bg-[#0D1117] flex items-center justify-center transition-transform group-hover:scale-105">
+              {/* تغيير لون حدود الصورة للأزرق */}
+              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-[#00BFFF]/20 bg-[#0D1117] flex items-center justify-center transition-transform group-hover:scale-105">
                 {profile.avatarUrl ? (
                   <img src={profile.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
                 ) : (
@@ -130,20 +132,20 @@ export default function ProfileAdmin() {
               <label className="text-sm font-medium text-gray-400">Full Name</label>
               <input 
                 type="text" 
-                placeholder="Sara Abdalwahab"
+                placeholder="Ahmed Mokhtar"
                 value={profile.name} 
                 onChange={e => setProfile({...profile, name: e.target.value})} 
-                className="w-full bg-[#0D1117] border border-[#30363D] rounded-xl p-4 outline-none focus:ring-2 focus:ring-[#FF006E]/50 focus:border-[#FF006E] transition-all" 
+                className="w-full bg-[#0D1117] border border-[#30363D] rounded-xl p-4 text-white outline-none focus:ring-2 focus:ring-[#00BFFF]/50 focus:border-[#00BFFF] transition-all" 
               />
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-400">Professional Headline</label>
               <input 
                 type="text" 
-                placeholder="Software Tester"
+                placeholder="Full-Stack Developer"
                 value={profile.headline} 
                 onChange={e => setProfile({...profile, headline: e.target.value})} 
-                className="w-full bg-[#0D1117] border border-[#30363D] rounded-xl p-4 outline-none focus:ring-2 focus:ring-[#FF006E]/50 focus:border-[#FF006E] transition-all" 
+                className="w-full bg-[#0D1117] border border-[#30363D] rounded-xl p-4 text-white outline-none focus:ring-2 focus:ring-[#00BFFF]/50 focus:border-[#00BFFF] transition-all" 
               />
             </div>
           </div>
@@ -155,7 +157,7 @@ export default function ProfileAdmin() {
               placeholder="Tell your professional story..."
               value={profile.bio} 
               onChange={e => setProfile({...profile, bio: e.target.value})} 
-              className="w-full bg-[#0D1117] border border-[#30363D] rounded-xl p-4 outline-none focus:ring-2 focus:ring-[#FF006E]/50 focus:border-[#FF006E] transition-all resize-none" 
+              className="w-full bg-[#0D1117] border border-[#30363D] rounded-xl p-4 text-white outline-none focus:ring-2 focus:ring-[#00BFFF]/50 focus:border-[#00BFFF] transition-all resize-none" 
             />
           </div>
         </section>
@@ -165,20 +167,20 @@ export default function ProfileAdmin() {
           <h2 className="text-xl font-bold border-b border-[#30363D] pb-4 text-white">Social & Reach</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="text-sm text-gray-400 flex items-center gap-2"><Mail size={16} className="text-[#FF006E]"/> Contact Email</label>
-              <input type="email" value={profile.email} onChange={e => setProfile({...profile, email: e.target.value})} className="w-full bg-[#0D1117] border border-[#30363D] rounded-xl p-3 focus:border-[#FF006E] outline-none" placeholder="sara@example.com" />
+              <label className="text-sm text-gray-400 flex items-center gap-2"><Mail size={16} className="text-[#00BFFF]"/> Contact Email</label>
+              <input type="email" value={profile.email} onChange={e => setProfile({...profile, email: e.target.value})} className="w-full bg-[#0D1117] border border-[#30363D] rounded-xl p-3 focus:border-[#00BFFF] outline-none text-white" placeholder="ahmed@example.com" />
             </div>
             <div className="space-y-2">
-              <label className="text-sm text-gray-400 flex items-center gap-2"><Github size={16} className="text-[#FF006E]"/> GitHub URL</label>
-              <input type="text" value={profile.githubUrl} onChange={e => setProfile({...profile, githubUrl: e.target.value})} className="w-full bg-[#0D1117] border border-[#30363D] rounded-xl p-3 focus:border-[#FF006E] outline-none" placeholder="https://github.com/..." />
+              <label className="text-sm text-gray-400 flex items-center gap-2"><Github size={16} className="text-[#00BFFF]"/> GitHub URL</label>
+              <input type="text" value={profile.githubUrl} onChange={e => setProfile({...profile, githubUrl: e.target.value})} className="w-full bg-[#0D1117] border border-[#30363D] rounded-xl p-3 focus:border-[#00BFFF] outline-none text-white" placeholder="https://github.com/..." />
             </div>
             <div className="space-y-2">
-              <label className="text-sm text-gray-400 flex items-center gap-2"><Linkedin size={16} className="text-[#FF006E]"/> LinkedIn URL</label>
-              <input type="text" value={profile.linkedinUrl} onChange={e => setProfile({...profile, linkedinUrl: e.target.value})} className="w-full bg-[#0D1117] border border-[#30363D] rounded-xl p-3 focus:border-[#FF006E] outline-none" placeholder="https://linkedin.com/in/..." />
+              <label className="text-sm text-gray-400 flex items-center gap-2"><Linkedin size={16} className="text-[#00BFFF]"/> LinkedIn URL</label>
+              <input type="text" value={profile.linkedinUrl} onChange={e => setProfile({...profile, linkedinUrl: e.target.value})} className="w-full bg-[#0D1117] border border-[#30363D] rounded-xl p-3 focus:border-[#00BFFF] outline-none text-white" placeholder="https://linkedin.com/in/..." />
             </div>
             <div className="space-y-2">
-              <label className="text-sm text-gray-400 flex items-center gap-2"><Globe size={16} className="text-[#FF006E]"/> CV / Portfolio Link</label>
-              <input type="text" value={profile.resumeUrl} onChange={e => setProfile({...profile, resumeUrl: e.target.value})} className="w-full bg-[#0D1117] border border-[#30363D] rounded-xl p-3 focus:border-[#FF006E] outline-none" placeholder="https://drive.google.com/..." />
+              <label className="text-sm text-gray-400 flex items-center gap-2"><Globe size={16} className="text-[#00BFFF]"/> CV / Portfolio Link</label>
+              <input type="text" value={profile.resumeUrl} onChange={e => setProfile({...profile, resumeUrl: e.target.value})} className="w-full bg-[#0D1117] border border-[#30363D] rounded-xl p-3 focus:border-[#00BFFF] outline-none text-white" placeholder="https://drive.google.com/..." />
             </div>
           </div>
         </section>
@@ -187,7 +189,7 @@ export default function ProfileAdmin() {
         <div className="flex justify-end pt-4">
           <button 
             disabled={loading} 
-            className="group bg-[#FF006E] hover:bg-[#FB5581] text-white px-12 py-4 rounded-2xl font-bold flex items-center gap-3 transition-all shadow-lg shadow-[#FF006E]/30 disabled:opacity-50 active:scale-95"
+            className="group bg-[#00BFFF] hover:bg-[#3B82F6] text-white px-12 py-4 rounded-2xl font-bold flex items-center gap-3 transition-all shadow-lg shadow-[#00BFFF]/30 disabled:opacity-50 active:scale-95"
           >
             {loading ? <Loader2 className="animate-spin" size={20} /> : <Save size={22} className="group-hover:rotate-12 transition-transform" />}
             Save Profile Settings
